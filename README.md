@@ -25,10 +25,9 @@
 ### Сбор метрик JMeter
 Для интеграции JMeter с Prometheus использован плагин:
 - **Плагин**:  [jmeter-prometheus-plugin v0.7.1](https://github.com/topics/jmeter-plugin)
-
-- **Порт**: 9270
-- **Endpoint**: `/metrics`
-- **Формат**: Native Prometheus metrics
+- Порт: 9270
+- Endpoint: `/metrics`
+- Формат: Native Prometheus metrics
   
 ## Быстрый старт
 
