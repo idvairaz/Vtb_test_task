@@ -31,10 +31,27 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,metrics,prometheus
+        include: health,metrics,prometheus,info
+      base-path: /actuator
   endpoint:
     health:
       show-details: always
+      show-components: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+    tags:
+      application: kafka-consumer
+    enable:
+      jvm: true
+      system: true
+      logback: true
+      kafka: true
+
 
 logging:
   pattern:
