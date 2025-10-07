@@ -123,33 +123,33 @@
       <hashTree/>
       <kg.apc.jmeter.threads.UltimateThreadGroup guiclass="kg.apc.jmeter.threads.UltimateThreadGroupGui" testclass="kg.apc.jmeter.threads.UltimateThreadGroup" testname="jp@gc - Ultimate Thread Group (Step 5-10-12-14 ops)" enabled="true">
         <collectionProp name="ultimatethreadgroupdata">
-          <collectionProp name="1835098219">
+          <collectionProp name="-1305197025">
             <stringProp name="53">5</stringProp>
             <stringProp name="0">0</stringProp>
             <stringProp name="1722">60</stringProp>
-            <stringProp name="1509345">1200</stringProp>
-            <stringProp name="48">0</stringProp>
-          </collectionProp>
-          <collectionProp name="1248537102">
-            <stringProp name="53">5</stringProp>
             <stringProp name="50547">300</stringProp>
             <stringProp name="1722">60</stringProp>
-            <stringProp name="56313">900</stringProp>
-            <stringProp name="48">0</stringProp>
           </collectionProp>
-          <collectionProp name="-244791053">
-            <stringProp name="50">2</stringProp>
-            <stringProp name="53430">600</stringProp>
-            <stringProp name="1722">60</stringProp>
-            <stringProp name="53430">600</stringProp>
-            <stringProp name="48">0</stringProp>
-          </collectionProp>
-          <collectionProp name="-1656009508">
-            <stringProp name="50">2</stringProp>
-            <stringProp name="56313">900</stringProp>
+          <collectionProp name="1038511571">
+            <stringProp name="1567">10</stringProp>
+            <stringProp name="50733">360</stringProp>
             <stringProp name="1722">60</stringProp>
             <stringProp name="50547">300</stringProp>
-            <stringProp name="48">0</stringProp>
+            <stringProp name="1722">60</stringProp>
+          </collectionProp>
+          <collectionProp name="611552388">
+            <stringProp name="1569">12</stringProp>
+            <stringProp name="54453">720</stringProp>
+            <stringProp name="1722">60</stringProp>
+            <stringProp name="50547">300</stringProp>
+            <stringProp name="1722">60</stringProp>
+          </collectionProp>
+          <collectionProp name="-1803399555">
+            <stringProp name="1571">14</stringProp>
+            <stringProp name="1507671">1080</stringProp>
+            <stringProp name="1722">60</stringProp>
+            <stringProp name="50547">300</stringProp>
+            <stringProp name="1722">60</stringProp>
           </collectionProp>
         </collectionProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
@@ -228,6 +228,7 @@ if (kafkaProducer == null) {
 }
 
 try {
+    
     def key = vars.get(&quot;msgUuid&quot;)
     def message = vars.get(&quot;kafkaMessage&quot;)
     
@@ -243,7 +244,7 @@ try {
     return &quot;TIMEOUT: &quot; + e.getMessage()
 } catch (java.lang.InterruptedException e) {
     log.warn(&quot;Interrupted while sending message&quot;)
-    Thread.currentThread().interrupt() // restore interrupt status
+    Thread.currentThread().interrupt() 
     return &quot;INTERRUPTED&quot;
 } catch (Exception e) {
     log.error(&quot;Failed to send message to Kafka: &quot; + e.getMessage())
@@ -252,6 +253,10 @@ try {
             <stringProp name="scriptLanguage">groovy</stringProp>
             <stringProp name="TestPlan.comments">Kafka Producer не нашелся, поэтому взяла  JSR223 Sampler</stringProp>
           </JSR223Sampler>
+          <hashTree/>
+          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer (speed control)" enabled="true">
+            <stringProp name="ConstantTimer.delay">1000</stringProp>
+          </ConstantTimer>
           <hashTree/>
         </hashTree>
       </hashTree>

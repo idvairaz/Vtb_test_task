@@ -51,7 +51,7 @@ CREATE TABLE messages (
 - Ступень 3: 12 оп/с (5 минут)
 - Ступень 4: 14 оп/с (5 минут)
 
-![steps](screenshots/steps.png "steps")
+![steps](screenshots/steps2.png "steps")
 
 
 ### Генерация сообщений:
@@ -67,22 +67,22 @@ CREATE TABLE messages (
 
 ### JMeter Test Plan структура:
 
-![test_plan](screenshots/test_plan.png "test_plan")
+![test_plan](screenshots/testplan.png "test_plan")
 
 
 ### Результаты тестирования:
+
 **Метрики:**
-- Общее время теста: 20 минут
-- Отправлено сообщений: 11158331
-- Сообщений с head: false: ~1115833.1 (10%)
-- Ошибок: 0%
+- **Общее время теста**: 24 мин 59 сек (20 мин + 4:59 на startup/shutdown)
+- **Отправлено сообщений**: 14,719 (расчетное: 12,300, отклонение: +19.7%)
+- **Сообщений с head: false**: 1,435 (9.75% - соответствует требованию 10%)
+- **Ошибок**: 0%
 
+**Анализ расхождений:**
+- Превышение времени и количества сообщений связано с временем запуска/остановки потоков JMeter
+- Качество данных соответствует ТЗ (10% сообщений с head: false)
 
-### Проблемы и решения:
-- **Проблема**: Kafka Producer был недоступен
-- **Решение**: Использован JSR223 Sampler
-- **Проблема**: Счетчик сообщений сбрасывался
-- **Решение**: Реализован глобальный AtomicLong счетчик
+![head10](screenshots/head10.png "head10")
 
 
 ## Задание 1.3: Spring Boot потребитель Kafka
@@ -115,13 +115,80 @@ CREATE TABLE messages (
 
 ## Задание 2: Мониторинг и визуализация метрик
 
-### Выполненные действия:
+### Развернутая инфраструктура мониторинга:
 
-1. **Развертывание локальной Grafana**
+1 **Grafana** - дашборды и визуализация
 
-**Инфраструктура мониторинга:**
+- Порт: 3000
+- Pre-configured datasources и dashboards
 
-- Grafana развернута в Docker контейнере
-- Prometheus как система сбора метрик
-- PostgreSQL Exporter для метрик базы данных
-- Spring Boot Actuator для JVM метрик приложения
+2 **Prometheus** - сбор метрик
+
+- Сбор метрик с Spring Boot Actuator
+- Сбор метрик с PostgreSQL Exporter
+- Сбор метрик с JMeter
+
+3 **Spring Boot Actuator** - метрики приложения
+
+- JVM метрики: память, потоки, GC
+- Kafka потребитель метрики
+- HTTP метрики
+
+4 **PostgreSQL Exporter** - метрики БД
+
+- Количество подключений
+- Производительность запросов
+- Размеры таблиц
+
+### Настроенные дашборды:
+
+**JVM Micrometer Dashboard**
+
+- Использование памяти (Heap/Non-Heap)
+- Активные потоки
+- Garbage Collection статистика
+- Throughput приложения
+
+![jvmdashb](screenshots/jvmdashb.png "jvmdashb")
+
+
+**PostgreSQL Database Dashboard**
+
+- Database connections
+- Query performance
+- Table statistics
+- Transaction metrics
+
+![logpostgres](screenshots/postgres.png "postgres")
+
+**JMeter Dashboard**
+
+- Requests per second
+- Response times
+- Error rates
+- Active threads
+
+![jmeterdashb](screenshots/JMeterdashb.png "jmeterdashb")
+
+
+# Итоговые результаты:
+
+## Производительность системы:
+
+- При максимальной нагрузке: 14 сообщений/сек -
+Общее обработанных сообщений: 14719
+
+- Сообщения с head: false: 1435 (~10%) 
+- Ошибок: 0% 
+
+## Надежность:
+
+- **Kafka**: стабильная работа при зафиксированной пиковой нагрузке
+- **PostgreSQL**: все сообщения сохранены без потерь
+- **Spring приложение**: многопоточная обработка без deadlock-ов
+
+## Масштабируемость:
+
+- Конфигурируемое количество потребителей Kafka
+- Настройки подключения к БД через environment variables
+- Docker-контейнеризация для простого развертывания
