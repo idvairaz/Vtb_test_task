@@ -10,12 +10,15 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update #validate
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-    show-sql: false
+#    show-sql: true
+    naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+
 
   kafka:
     bootstrap-servers: localhost:9092
