@@ -47,14 +47,16 @@ docker exec kafka kafka-topics --create \
 
 ### 3. Создание таблицы в PostgreSQL
 
+При запуске приложения таблица создается автоматически. Скрипт для создания таблицы приведен для примера
+
 ```bash
 docker exec postgres psql -U test_user -d test_db -c "
 CREATE TABLE messages (
     id SERIAL PRIMARY KEY,
-    msgUuid VARCHAR(36) NOT NULL UNIQUE,
-    head BOOLEAN NOT NULL,
-    timeRq BIGINT NOT NULL,
-);"
+    msgUuid VARCHAR(36) UNIQUE,
+    head BOOLEAN,
+    timeRq BIGINT
+);
 ```
 
 ### 4. Запуск Spring Boot приложения
