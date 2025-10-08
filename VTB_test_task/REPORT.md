@@ -25,12 +25,14 @@
 
 **3. Создание таблицы в PostgreSQL**
 
+При запуске приложения таблица создается автоматически. Скрипт для создания таблицы приведен для примера
+
 ```sql
 CREATE TABLE messages (
     id SERIAL PRIMARY KEY,
-    msgUuid VARCHAR(36) NOT NULL UNIQUE,
-    head BOOLEAN NOT NULL,
-    timeRq BIGINT NOT NULL
+    msgUuid VARCHAR(36) UNIQUE,
+    head BOOLEAN,
+    timeRq BIGINT
 );
 ```
 ![CREATE TABLE](screenshots/creatr_table.png "CREATE TABLE")
@@ -177,7 +179,6 @@ CREATE TABLE messages (
 
 - При максимальной нагрузке: 14 сообщений/сек -
 Общее обработанных сообщений: 14719
-
 - Сообщения с head: false: 1435 (~10%) 
 - Ошибок: 0% 
 
@@ -192,3 +193,32 @@ CREATE TABLE messages (
 - Конфигурируемое количество потребителей Kafka
 - Настройки подключения к БД через environment variables
 - Docker-контейнеризация для простого развертывания
+
+## Задание 3*: Динамическое управление задержкой обработки записей
+
+### Реализован функционал:
+
+1  **Базовой задержки**  создания записи в БД после вычитки ее из топика Kafka
+
+- Задержка 1000 мс по умолчанию между чтением из Kafka и сохранением в БД
+- Потокобезопасная реализация через AtomicLong
+
+2  **Динамическое изменение задержки**
+
+- REST API для управления задержкой без перезапуска приложения
+- Валидация входных параметров (0-30000 мс)
+- Логирование всех изменений задержки
+
+![delay](screenshots/delay.png "delay")
+
+**Установить задержку** (500мс)
+
+```bash
+curl -X POST "http://localhost:8080/api/config/delay?delayMs=500"
+```
+
+**Проверить текущую задержку**
+```bash
+curl -X GET "http://localhost:8080/api/config/delay"
+```
+
