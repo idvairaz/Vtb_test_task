@@ -162,12 +162,12 @@
         <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <intProp name="LoopController.loops">-1</intProp>
         </LoopController>
-        <hashTree>
-          <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="SR223 PreProcessor (Generate Kafka Msg)" enabled="true">
-            <stringProp name="cacheKey">true</stringProp>
-            <stringProp name="filename"></stringProp>
-            <stringProp name="parameters"></stringProp>
-            <stringProp name="script">import java.util.UUID
+        <hashTree/>
+        <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="SR223 PreProcessor (Generate Kafka Msg)" enabled="true">
+          <stringProp name="cacheKey">true</stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="script">import java.util.UUID
 import groovy.json.JsonOutput
 import java.util.concurrent.atomic.AtomicLong
 
@@ -202,14 +202,14 @@ if (counter % 100 == 0) {
 } else if (!head) {
     log.info(&quot;10th message #${counter}: head=${head}&quot;)
 }</stringProp>
-            <stringProp name="scriptLanguage">groovy</stringProp>
-          </JSR223PreProcessor>
-          <hashTree/>
-          <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223 Sampler (Send to Kafka)" enabled="true">
-            <stringProp name="cacheKey">true</stringProp>
-            <stringProp name="filename"></stringProp>
-            <stringProp name="parameters"></stringProp>
-            <stringProp name="script">import org.apache.kafka.clients.producer.*
+          <stringProp name="scriptLanguage">groovy</stringProp>
+        </JSR223PreProcessor>
+        <hashTree/>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223 Sampler (Send to Kafka)" enabled="true">
+          <stringProp name="cacheKey">true</stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="script">import org.apache.kafka.clients.producer.*
 import java.util.Properties
 
 def kafkaProducer = vars.getObject(&quot;kafkaProducer&quot;)
@@ -250,15 +250,14 @@ try {
     log.error(&quot;Failed to send message to Kafka: &quot; + e.getMessage())
     return &quot;ERROR: &quot; + e.getMessage()
 }</stringProp>
-            <stringProp name="scriptLanguage">groovy</stringProp>
-            <stringProp name="TestPlan.comments">Kafka Producer не нашелся, поэтому взяла  JSR223 Sampler</stringProp>
-          </JSR223Sampler>
-          <hashTree/>
-          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer (speed control)" enabled="true">
-            <stringProp name="ConstantTimer.delay">1000</stringProp>
-          </ConstantTimer>
-          <hashTree/>
-        </hashTree>
+          <stringProp name="scriptLanguage">groovy</stringProp>
+          <stringProp name="TestPlan.comments">Kafka Producer не нашелся, поэтому взяла  JSR223 Sampler</stringProp>
+        </JSR223Sampler>
+        <hashTree/>
+        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer (speed control)" enabled="true">
+          <stringProp name="ConstantTimer.delay">1000</stringProp>
+        </ConstantTimer>
+        <hashTree/>
       </hashTree>
       <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree (Debug)" enabled="true">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
