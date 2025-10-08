@@ -19,6 +19,9 @@ public class KafkaConsumerServiceImpl implements KafkaConsumerService{
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private DelayService delayService;
+
     @KafkaListener(topics = "${app.kafka.topic}", concurrency = "${app.kafka.concurrency:3}")
     @Transactional
     public void consume(String message) {
@@ -27,23 +30,26 @@ public class KafkaConsumerServiceImpl implements KafkaConsumerService{
             return;
         }
         try {
-            // Логируем получение сообщения из Kafka
             log.info("[Read from Kafka] {}", message);
-
-            // Парсим JSON сообщение
             JsonNode jsonNode = objectMapper.readTree(message);
 
             String msgUuid = jsonNode.get("msg_uuid").asText();
             Boolean head = jsonNode.get("head").asBoolean();
-            long timestamp = System.currentTimeMillis() / 1000; // UNIX time
-
-            // Проверяем дубликаты
+            long timestamp = System.currentTimeMillis() / 1000;
             if (messageRepository.existsByMsgUuid(msgUuid)) {
                 log.warn("Duplicate message detected: {}", msgUuid);
                 return;
             }
 
-            // Создаем и сохраняем запись в БД
+            long currentDelay = delayService.getCurrentDelay();
+            log.info("Applying processing delay: {} ms", currentDelay);
+            try {
+                Thread.sleep(currentDelay);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                log.warn("Message processing was interrupted");
+                return;
+            }
             Message dbMessage = new Message();
             dbMessage.setMsgUuid(msgUuid);
             dbMessage.setHead(head);
@@ -51,7 +57,6 @@ public class KafkaConsumerServiceImpl implements KafkaConsumerService{
 
             messageRepository.save(dbMessage);
 
-            // Логируем запись в БД
             log.info("[Write to DB] {{ \"msgUuid\": \"{}\", \"head\": {}, \"timeRq\": \"{}\" }}",
                     msgUuid, head, timestamp);
 
