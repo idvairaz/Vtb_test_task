@@ -159,10 +159,6 @@
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
       </kg.apc.jmeter.threads.UltimateThreadGroup>
       <hashTree>
-        <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
-          <intProp name="LoopController.loops">-1</intProp>
-        </LoopController>
-        <hashTree/>
         <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="SR223 PreProcessor (Generate Kafka Msg)" enabled="true">
           <stringProp name="cacheKey">true</stringProp>
           <stringProp name="filename"></stringProp>
